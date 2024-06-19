@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_mad3/src/controllers/auth_controller.dart';
 
 class ProfileScreen extends StatelessWidget {
 
@@ -9,6 +10,18 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     return const Center(child: Text("Profile"));
+     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+       children: [
+         Center(child: Text("Profile")),
+         ElevatedButton(
+          onPressed: (){
+            AuthController.I.logOut();
+          }, 
+          child: const Text("Log out"),
+        )
+       ],
+     );
   }
 }

@@ -2,9 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_mad3/firebase_options.dart';
 
+import 'src/controllers/auth_controller.dart';
 import 'src/routing/router.dart';
 
 Future<void> main() async {
+  AuthController.initialize();
   GlobalRouter.initialize();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -23,7 +25,7 @@ class MainApp extends StatelessWidget {
       routerConfig: GlobalRouter.I.router,
       title: 'Stateful Changes Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 62, 61, 63)),
         useMaterial3: true,
       ),
     );

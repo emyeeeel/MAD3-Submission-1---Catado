@@ -1,7 +1,11 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile_mad3/src/controllers/auth_controller.dart';
+import 'package:mobile_mad3/src/enum/enum.dart';
 import 'package:mobile_mad3/src/screens/auth/login_screen.dart';
 import 'package:mobile_mad3/src/screens/home/profile.dart';
 
@@ -23,13 +27,32 @@ class GlobalRouter{
   late GlobalKey<NavigatorState> _rootNavigatorKey;
   late GlobalKey<NavigatorState> _shellNavigatorKey;
 
+  FutureOr<String?> handleRedirect(
+      BuildContext context, GoRouterState state) async {
+    if (AuthController.I.state == AuthState.authenticated) {
+      if (state.matchedLocation == LoginScreen.route) {
+        return HomeScreen.route;
+      }
+      return null;
+    }
+    if (AuthController.I.state != AuthState.authenticated) {
+      if (state.matchedLocation == LoginScreen.route) {
+        return null;
+      }
+      return LoginScreen.route;
+    }
+    return null;
+  }
+
   GlobalRouter(){
     _rootNavigatorKey = GlobalKey<NavigatorState>();
     _shellNavigatorKey = GlobalKey<NavigatorState>();
 
     router = GoRouter(
         navigatorKey: _rootNavigatorKey,
-        initialLocation: LoginScreen.route,
+        initialLocation: HomeScreen.route,
+        redirect: handleRedirect,
+        refreshListenable: AuthController.I,
         routes: [
           GoRoute(
             parentNavigatorKey: _rootNavigatorKey,
@@ -60,7 +83,7 @@ class GlobalRouter{
                 return HomeWrapper(
                   child: child,
                 );
-              }),
+      }),
     ]);
   }
 }

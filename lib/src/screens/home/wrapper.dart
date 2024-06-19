@@ -21,7 +21,7 @@ class _HomeWrapperState extends State<HomeWrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: widget.child ?? const Placeholder(),
-            bottomNavigationBar: BottomNavigationBar(
+        bottomNavigationBar: BottomNavigationBar(
         // showSelectedLabels: false,
         // showUnselectedLabels: false,
         currentIndex: index,
