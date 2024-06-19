@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile_mad3/src/screens/auth/login_screen.dart';
 import 'package:mobile_mad3/src/screens/home/profile.dart';
 
 import '../screens/home/home_screen.dart';
@@ -28,8 +29,15 @@ class GlobalRouter{
 
     router = GoRouter(
         navigatorKey: _rootNavigatorKey,
-        initialLocation: HomeScreen.route,
+        initialLocation: LoginScreen.route,
         routes: [
+          GoRoute(
+            parentNavigatorKey: _rootNavigatorKey,
+            path: LoginScreen.route,
+            name: LoginScreen.name,
+            builder: (context, _) {
+              return const LoginScreen();
+          }),
           ShellRoute(
               navigatorKey: _shellNavigatorKey,
               routes: [
