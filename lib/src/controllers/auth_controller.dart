@@ -32,7 +32,7 @@ class AuthController with ChangeNotifier {
     bool isLoggedIn = await api.signUserOut();
     if (isLoggedIn) {
       state = AuthState.unauthenticated;
-      //should store session
+      //should remove session
 
       notifyListeners();
     }

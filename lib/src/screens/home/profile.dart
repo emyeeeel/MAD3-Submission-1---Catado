@@ -14,7 +14,7 @@ class ProfileScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
        children: [
-         Center(child: Text("Profile")),
+         const Center(child: Text("Profile")),
          ElevatedButton(
           onPressed: (){
             AuthController.I.logOut();

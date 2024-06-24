@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_mad3/firebase_options.dart';
 
@@ -20,14 +21,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return CupertinoApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: GlobalRouter.I.router,
       title: 'Stateful Changes Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 62, 61, 63)),
-        useMaterial3: true,
-      ),
+      theme: const CupertinoThemeData(brightness: Brightness.light),
     );
   }
 }
