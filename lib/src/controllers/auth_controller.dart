@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../enum/enum.dart';
 
@@ -20,6 +21,16 @@ class AuthController with ChangeNotifier {
 
   logIn(String email, String password) async {
     bool isLoggedIn = await api.signUserIn(email, password);
+    if (isLoggedIn) {
+      state = AuthState.authenticated;
+      //should store session
+
+      notifyListeners();
+    }
+  }
+
+  logInWithGoogle() async {
+    bool isLoggedIn = await api.signInWithGoogle();
     if (isLoggedIn) {
       state = AuthState.authenticated;
       //should store session
@@ -63,5 +74,26 @@ class SimulatedAPI {
   Future<bool> signUserOut() async{
     await FirebaseAuth.instance.signOut();
     return true;
+  }
+
+  Future<bool> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      return true;
+    } on Exception catch (e) {
+      // TODO
+      print('exception->$e');
+      return false;
+    }
   }
 }

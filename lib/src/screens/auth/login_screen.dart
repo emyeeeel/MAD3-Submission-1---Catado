@@ -96,14 +96,20 @@ class _LoginScreenState extends State<LoginScreen> {
             Row(
               children: [
                 const Spacer(),
-                Container(
-                  width: 100,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(width: 1, color: Colors.black)
+                GestureDetector(
+                  onTap: () async {
+                    print("Container clicked!");
+                    await AuthController.I.logInWithGoogle();
+                  },
+                  child: Container(
+                    width: 100,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(width: 1, color: Colors.black)
+                    ),
+                    child: SvgPicture.asset('lib/src/assets/logos/google_logo.svg', fit: BoxFit.scaleDown,),
                   ),
-                  child: SvgPicture.asset('lib/src/assets/logos/google_logo.svg', fit: BoxFit.scaleDown,),
                 ),
                 const SizedBox(width: 10,),
                 Container(
