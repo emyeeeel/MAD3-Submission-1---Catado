@@ -84,7 +84,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: MediaQuery.of(context).size.width * .80,
                 child: CupertinoButton.filled(
                   onPressed: () async {
-                    await AuthController.I.logIn(email.text.trim(), password.text.trim());
+                    showCupertinoDialog(
+                      context: context, 
+                      builder: (context) {
+                        return const Center(child: CupertinoActivityIndicator());
+                      }
+                    );
+                    AuthController.I.logIn(email.text.trim(), password.text.trim());
+                    await Future.delayed(Durations.medium1);
                   },
                   child: const Text("Sign in"),
                 ),
@@ -97,9 +104,15 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 const Spacer(),
                 GestureDetector(
-                  onTap: () async {
-                    print("Container clicked!");
-                    await AuthController.I.logInWithGoogle();
+                  onTap: () async { 
+                    showCupertinoDialog(
+                      context: context, 
+                      builder: (context) {
+                        return const Center(child: CupertinoActivityIndicator());
+                      }
+                    );
+                    AuthController.I.logInWithGoogle();
+                    await Future.delayed(Durations.medium1);
                   },
                   child: Container(
                     width: 100,
@@ -135,7 +148,20 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
             const SizedBox(height: 100,),
-            const Text("Dont't have an account? Sign up"),
+            RichText(
+              text: const TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Dont't have an account? ",
+                    style: TextStyle(fontWeight: FontWeight.normal, color:  Colors.black), 
+                  ),
+                  TextSpan(
+                    text: "Sign up",
+                    style: TextStyle(fontWeight: FontWeight.bold, color:  Colors.blue), 
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       )

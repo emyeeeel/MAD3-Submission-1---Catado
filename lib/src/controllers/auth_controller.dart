@@ -44,7 +44,6 @@ class AuthController with ChangeNotifier {
     if (isLoggedIn) {
       state = AuthState.unauthenticated;
       //should remove session
-
       notifyListeners();
     }
   }

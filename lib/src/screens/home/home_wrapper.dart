@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:mobile_mad3/src/screens/home/profile.dart';
 import '../../routing/router.dart';
 import 'home_screen.dart';
@@ -21,8 +22,8 @@ class _HomeWrapperState extends State<HomeWrapper> {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         items: const [
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.profile_circled), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
         currentIndex: index,
         onTap: (i) {
