@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:mobile_mad3/src/screens/home/profile.dart';
 import '../../routing/router.dart';
 import 'home_screen.dart';
@@ -15,7 +14,7 @@ class HomeWrapper extends StatefulWidget {
 class _HomeWrapperState extends State<HomeWrapper> {
   int index = 0;
 
-  List<String> routes = [HomeScreen.route, "/profile"];
+  List<String> routes = [HomeScreen.route, ProfileScreen.route];
 
   @override
   Widget build(BuildContext context) {

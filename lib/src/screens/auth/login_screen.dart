@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatefulWidget {
 
-  static const String route = '/auth';
+  static const String route = '/login';
   static const String name = "Login Screen";
 
   const LoginScreen({super.key});
@@ -19,11 +19,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   late TextEditingController email, password;
 
+  late bool isClicked;
+
   @override
   void initState() {
     super.initState();
     email = TextEditingController();
     password = TextEditingController();
+    isClicked = false;
   }
 
   @override
@@ -36,11 +39,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      // navigationBar: CupertinoNavigationBar(
-        
-      //   backgroundColor: Colors.deepPurple[200],
-      //   middle: Text('Log in Screen'),
-      // ),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -62,7 +60,22 @@ class _LoginScreenState extends State<LoginScreen> {
               child: CupertinoTextField(
                 controller: password,
                 placeholder: "Enter password",
-                obscureText: true,
+                obscureText: isClicked ? false : true,
+                suffix: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isClicked = !isClicked;
+                    });
+                  },
+                  child: SizedBox(
+                    child: Row(
+                      children: [
+                        Icon(isClicked ? Icons.visibility : Icons.visibility_off),
+                        const SizedBox(width: 10,)
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 50,),
@@ -115,75 +128,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Spacer(),
               ],
             ),
-            const Text("Or sign up with:"),
+            const SizedBox(height: 100,),
+            const Text("Dont't have an account? Sign up"),
           ],
         ),
       )
     );
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     centerTitle: true,
-    //     automaticallyImplyLeading: false,
-    //     title: const Text("Log in"),
-    //   ),
-    //   body: Center(
-    //     child: Column(
-    //       children: [
-    //         Container(
-    //           width: MediaQuery.of(context).size.width - 80,
-    //           height: 50,
-    //           decoration: BoxDecoration(
-    //             borderRadius: BorderRadius.circular(25),
-    //             border: Border.all(width: 2, color: Colors.black), 
-    //           ),
-    //           child: Padding(
-    //             padding: const EdgeInsets.fromLTRB(20,0,0,0),
-    //             child: TextField(
-    //               controller: email,
-    //               decoration: const InputDecoration(
-    //                 hintText: 'Email',
-    //                 border: InputBorder.none,
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //         const SizedBox(height: 20,),
-    //         Container(
-    //           width: MediaQuery.of(context).size.width - 80,
-    //           height: 50,
-    //           decoration: BoxDecoration(
-    //             borderRadius: BorderRadius.circular(25),
-    //             border: Border.all(width: 2, color: Colors.black), 
-    //           ),
-    //           child: Padding(
-    //             padding: const EdgeInsets.fromLTRB(20,0,0,0),
-    //             child: TextField(
-    //               controller: password,
-    //               decoration: const InputDecoration(
-    //                 hintText: 'Password',
-    //                 border: InputBorder.none,
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    //   bottomNavigationBar: SafeArea(
-    //     child: Padding(
-    //       padding: const EdgeInsets.fromLTRB(0,0,0,20),
-    //       child: Container(
-    //         margin: const EdgeInsets.symmetric(horizontal: 24),
-    //         height: 52,
-    //         child: ElevatedButton(
-    //           onPressed: () {
-    //             AuthController.I.logIn(email.text.trim(), password.text.trim());
-    //           },
-    //           child: const Text("Log in"),
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }

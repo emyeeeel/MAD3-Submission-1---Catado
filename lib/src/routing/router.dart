@@ -10,7 +10,7 @@ import 'package:mobile_mad3/src/screens/auth/login_screen.dart';
 import 'package:mobile_mad3/src/screens/home/profile.dart';
 
 import '../screens/home/home_screen.dart';
-import '../screens/home/wrapper.dart';
+import '../screens/home/home_wrapper.dart';
 
 class GlobalRouter{
   // Static method to initialize the singleton in GetIt
@@ -35,11 +35,11 @@ class GlobalRouter{
       }
       return null;
     }
-    if (AuthController.I.state != AuthState.authenticated) {
-      if (state.matchedLocation == LoginScreen.route) {
-        return null;
+    
+    if (AuthController.I.state == AuthState.unauthenticated) {
+      if (state.matchedLocation != LoginScreen.route) {
+        return LoginScreen.route;
       }
-      return LoginScreen.route;
     }
     return null;
   }
@@ -73,8 +73,8 @@ class GlobalRouter{
                     }),
                 GoRoute(
                     parentNavigatorKey: _shellNavigatorKey,
-                    path: "/profile",
-                    name: "Wrapped Index",
+                    path: ProfileScreen.route,
+                    name: ProfileScreen.name,
                     builder: (context, _) {
                       return const ProfileScreen();
                     }),
