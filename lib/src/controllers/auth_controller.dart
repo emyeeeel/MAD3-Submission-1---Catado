@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../enum/enum.dart';
 
@@ -17,47 +18,51 @@ class AuthController with ChangeNotifier {
   static AuthController get I => GetIt.instance<AuthController>();
 
   AuthState state = AuthState.unauthenticated;
-  SimulatedAPI api = SimulatedAPI();
+
+  String? _name;
+  String? get name => _name;
+
+  String? _email;
+  String? get email => _email;
+
+  String? _provider;
+  String? get provider => _provider;
+
 
   logIn(String email, String password) async {
-    bool isLoggedIn = await api.signUserIn(email, password);
-    if (isLoggedIn) {
-      state = AuthState.authenticated;
-      //should store session
-
-      notifyListeners();
-    }
+    await signUserIn(email, password);
+    final SharedPreferences s = await SharedPreferences.getInstance();
+    await s.setString('name', _name!);
+    await s.setString('email', _email!);
+    await s.setString('provider', _provider!);
+    notifyListeners();
   }
 
   logInWithGoogle() async {
-    bool isLoggedIn = await api.signInWithGoogle();
-    if (isLoggedIn) {
-      state = AuthState.authenticated;
-      //should store session
-
-      notifyListeners();
-    }
+    await signInWithGoogle();
+    final SharedPreferences s = await SharedPreferences.getInstance();
+    await s.setString('name', _name!);
+    await s.setString('email', _email!);
+    await s.setString('provider', _provider!);
+    notifyListeners();
   }
 
   logOut() async {
-    bool isLoggedIn = await api.signUserOut();
-    if (isLoggedIn) {
-      state = AuthState.unauthenticated;
-      //should remove session
-      notifyListeners();
-    }
+    await signUserOut();
+    final SharedPreferences s = await SharedPreferences.getInstance();
+    s.clear();
+    notifyListeners();
   }
-}
 
-class SimulatedAPI {
-
-  Future<bool> signUserIn(String email, String password) async {
+  Future<void> signUserIn(String email, String password) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password, 
-      );
-      return true;
+
+      final User userDetails = (await FirebaseAuth.instance.signInWithEmailAndPassword(email: email,password: password)).user!;
+
+      _name = "Test User";
+      _email = userDetails.email;
+      _provider = "EMAIL/PASSWORD AUTH";
+
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw Exception("User not found!");
@@ -66,16 +71,14 @@ class SimulatedAPI {
       } else {
         throw Exception("Authentication failed");
       }
-      return false;
     }
   }
 
-  Future<bool> signUserOut() async{
+  Future<void> signUserOut() async{
     await FirebaseAuth.instance.signOut();
-    return true;
   }
 
-  Future<bool> signInWithGoogle() async {
+  Future<void> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -87,12 +90,23 @@ class SimulatedAPI {
         idToken: googleAuth?.idToken,
       );
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
-      return true;
+      // signing to firebase user instance
+      final User userDetails = (await FirebaseAuth.instance.signInWithCredential(credential)).user!;
+
+      _name = userDetails.displayName;
+      _email = userDetails.email;
+      _provider = "GOOGLE AUTH";
     } on Exception catch (e) {
       // TODO
       print('exception->$e');
-      return false;
     }
+  }
+
+  Future getDataFromSharedPreferences() async {
+    final SharedPreferences s = await SharedPreferences.getInstance();
+    _name = s.getString('name');
+    _email = s.getString('email');
+    _provider = s.getString('provider');
+    notifyListeners();
   }
 }

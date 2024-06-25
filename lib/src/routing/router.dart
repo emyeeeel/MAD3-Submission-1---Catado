@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -27,8 +28,18 @@ class GlobalRouter{
   late GlobalKey<NavigatorState> _rootNavigatorKey;
   late GlobalKey<NavigatorState> _shellNavigatorKey;
 
+  void checkUser(){
+    if(FirebaseAuth.instance.currentUser != null){
+      AuthController.I.state = AuthState.authenticated;
+    }
+    else{
+      AuthController.I.state = AuthState.unauthenticated;
+    }
+  }
+
   FutureOr<String?> handleRedirect(
       BuildContext context, GoRouterState state) async {
+    checkUser();
     if (AuthController.I.state == AuthState.authenticated) {
       if (state.matchedLocation == LoginScreen.route) {
         return HomeScreen.route;
