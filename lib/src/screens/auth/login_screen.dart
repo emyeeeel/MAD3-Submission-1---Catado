@@ -70,8 +70,8 @@ class _LoginScreenState extends State<LoginScreen> {
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * .80,
                 child: CupertinoButton.filled(
-                  onPressed: () {
-                    AuthController.I.logIn(email.text.trim(), password.text.trim());
+                  onPressed: () async {
+                    await AuthController.I.logIn(email.text.trim(), password.text.trim());
                   },
                   child: const Text("Sign in"),
                 ),
@@ -114,7 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const Spacer(),
               ],
-            )
+            ),
+            const Text("Or sign up with:"),
           ],
         ),
       )
