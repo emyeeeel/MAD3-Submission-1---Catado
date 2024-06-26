@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_mad3/src/controllers/auth_controller.dart';
@@ -33,8 +32,8 @@ class ProfileScreen extends StatelessWidget {
                  child: Row(
                    children: [
                       const SizedBox(width: 20,),
-                      const CircleAvatar(
-                          backgroundImage: NetworkImage('https://th.bing.com/th/id/OIP.1ysuWzMkrR4WxUAL3jfWEwAAAA?rs=1&pid=ImgDetMain'),
+                      CircleAvatar(
+                          backgroundImage: NetworkImage(AuthController.I.image!),
                           radius: 75,
                       ),
                       const SizedBox(width: 20,),

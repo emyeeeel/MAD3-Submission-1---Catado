@@ -25,32 +25,37 @@ class AuthController with ChangeNotifier {
   String? _email;
   String? get email => _email;
 
+  String? _image;
+  String? get image => _image;
+
   String? _provider;
   String? get provider => _provider;
 
+  String errorMessage = '';
 
   logIn(String email, String password) async {
-    await signUserIn(email, password);
-    final SharedPreferences s = await SharedPreferences.getInstance();
-    await s.setString('name', _name!);
-    await s.setString('email', _email!);
-    await s.setString('provider', _provider!);
+    
+    await signUserIn(email, password); 
+    AuthController.I.state = AuthState.authenticated;
+    await saveDataFromSharedPreferences();
     notifyListeners();
   }
 
   logInWithGoogle() async {
     await signInWithGoogle();
-    final SharedPreferences s = await SharedPreferences.getInstance();
-    await s.setString('name', _name!);
-    await s.setString('email', _email!);
-    await s.setString('provider', _provider!);
+    AuthController.I.state = AuthState.authenticated;
+    await saveDataFromSharedPreferences();
     notifyListeners();
   }
 
   logOut() async {
+    AuthController.I.state = AuthState.unauthenticated;
     await signUserOut();
     final SharedPreferences s = await SharedPreferences.getInstance();
     s.clear();
+    //to check clearing of session
+    await getDataFromSharedPreferences();
+    print("Current User: ${AuthController.I.email}");
     notifyListeners();
   }
 
@@ -62,15 +67,10 @@ class AuthController with ChangeNotifier {
       _name = "Test User";
       _email = userDetails.email;
       _provider = "EMAIL/PASSWORD AUTH";
+      _image = "https://th.bing.com/th/id/OIP.1ysuWzMkrR4WxUAL3jfWEwAAAA?rs=1&pid=ImgDetMain";
 
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        throw Exception("User not found!");
-      } else if (e.code == 'wrong-password') {
-        throw Exception("Password does not match!");
-      } else {
-        throw Exception("Authentication failed");
-      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
@@ -96,10 +96,17 @@ class AuthController with ChangeNotifier {
       _name = userDetails.displayName;
       _email = userDetails.email;
       _provider = "GOOGLE AUTH";
-    } on Exception catch (e) {
-      // TODO
-      print('exception->$e');
+      _image = userDetails.photoURL;
+    }  catch (e) {
+      throw Exception(e);
     }
+  }
+  Future saveDataFromSharedPreferences() async {
+    final SharedPreferences s = await SharedPreferences.getInstance();
+    await s.setString('name', _name!);
+    await s.setString('email', _email!);
+    await s.setString('provider', _provider!);
+    await s.setString('image', _image!);
   }
 
   Future getDataFromSharedPreferences() async {
@@ -107,6 +114,6 @@ class AuthController with ChangeNotifier {
     _name = s.getString('name');
     _email = s.getString('email');
     _provider = s.getString('provider');
-    notifyListeners();
+    _image = s.getString('image');
   }
 }

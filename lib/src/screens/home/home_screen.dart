@@ -1,5 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobile_mad3/src/controllers/auth_controller.dart';
 
@@ -19,7 +17,8 @@ class HomeScreen extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CupertinoActivityIndicator());
           } else {
-            print(AuthController.I.email);
+            //to check current user session validation
+            print("Current User: ${AuthController.I.email}");
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

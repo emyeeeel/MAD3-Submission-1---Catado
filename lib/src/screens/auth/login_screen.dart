@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_mad3/src/controllers/auth_controller.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -68,7 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     obscureText: isClicked ? false : true,
                     suffix: GestureDetector(
                       onTap: () {
-                        print('${AuthController.I.email}');
                         setState(() {
                           isClicked = !isClicked;
                         });
@@ -96,8 +94,31 @@ class _LoginScreenState extends State<LoginScreen> {
                             return const Center(child: CupertinoActivityIndicator());
                           }
                         );
-                        AuthController.I.logIn(email.text.trim(), password.text.trim());
-                        await Future.delayed(Durations.medium1);
+                        try{
+                          await AuthController.I.logIn(email.text.trim(), password.text.trim());
+                          await Future.delayed(Durations.medium1);
+                        } catch (e){
+                          if(e is Exception){
+                            showCupertinoDialog(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoAlertDialog(
+                                title: Text('Login Failed'),
+                                content: Text(e.toString()),
+                                actions: <Widget>[
+                                  CupertinoDialogAction(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          }
+                        }
                       },
                       child: const Text("Sign in"),
                     ),
