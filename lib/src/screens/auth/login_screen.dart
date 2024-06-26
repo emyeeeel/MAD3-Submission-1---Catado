@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_mad3/src/controllers/auth_controller.dart';
@@ -103,11 +102,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             context: context,
                             builder: (context) {
                               return CupertinoAlertDialog(
-                                title: Text('Login Failed'),
+                                title: const Text('Login Failed'),
                                 content: Text(e.toString()),
                                 actions: <Widget>[
                                   CupertinoDialogAction(
-                                    child: Text('OK'),
+                                    child: const Text('OK'),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();

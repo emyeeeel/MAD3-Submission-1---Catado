@@ -24,9 +24,9 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text("Home"),
-                  Text('${AuthController.I.provider ?? ""}'),
-                  Text('${AuthController.I.name ?? ""}'),
-                  Text('${AuthController.I.email ?? ""}'),
+                  Text('Auth provider: ${AuthController.I.provider ?? ""}'),
+                  Text('Current user name: ${AuthController.I.name ?? ""}'),
+                  Text('Current user email: ${AuthController.I.email ?? ""}'),
                 ],
               ),
             );
