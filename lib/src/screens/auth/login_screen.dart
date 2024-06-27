@@ -1,8 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_mad3/src/controllers/auth_controller.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../routing/router.dart';
+import 'sign_up_screen.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -20,14 +24,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   late TextEditingController email, password;
 
-  late bool isClicked;
+  late bool isClicked = false;
 
   @override
   void initState() {
     super.initState();
     email = TextEditingController();
     password = TextEditingController();
-    isClicked = false;
   }
 
   @override
@@ -55,6 +58,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: CupertinoTextField(
                     controller: email,
                     placeholder: "Enter email",
+                    placeholderStyle: const TextStyle(color: CupertinoColors.inactiveGray),
+                    decoration: BoxDecoration(
+                      color: CupertinoColors.white, 
+                      borderRadius: BorderRadius.circular(8), 
+                      border: Border.all(
+                        color: CupertinoColors.inactiveGray, 
+                        width: 1.0, 
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20,),
@@ -64,6 +76,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: CupertinoTextField(
                     controller: password,
                     placeholder: "Enter password",
+                    placeholderStyle: const TextStyle(color: CupertinoColors.inactiveGray),
+                    decoration: BoxDecoration(
+                      color: CupertinoColors.white, 
+                      borderRadius: BorderRadius.circular(8), 
+                      border: Border.all(
+                        color: CupertinoColors.inactiveGray, 
+                        width: 1.0, 
+                      ),
+                    ),
                     obscureText: isClicked ? false : true,
                     suffix: GestureDetector(
                       onTap: () {
@@ -167,16 +188,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 100,),
                 RichText(
-                  text: const TextSpan(
+                  text: TextSpan(
                     children: [
-                      TextSpan(
+                      const TextSpan(
                         text: "Dont't have an account? ",
                         style: TextStyle(fontWeight: FontWeight.normal, color:  Colors.black), 
                       ),
                       TextSpan(
                         text: "Sign up",
-                        style: TextStyle(fontWeight: FontWeight.bold, color:  Colors.blue), 
-                      ),
+                        style: const TextStyle(fontWeight: FontWeight.bold, color:  Colors.blue), 
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          print('button tapped!');
+                          GlobalRouter.I.router.go(SignUpScreen.route);
+                        },
+                      ), 
                     ],
                   ),
                 ),

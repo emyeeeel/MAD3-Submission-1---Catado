@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mobile_mad3/src/controllers/auth_controller.dart';
 import 'package:mobile_mad3/src/enum/enum.dart';
 import 'package:mobile_mad3/src/screens/auth/login_screen.dart';
+import 'package:mobile_mad3/src/screens/auth/sign_up_screen.dart';
 import 'package:mobile_mad3/src/screens/home/profile.dart';
 
 import '../screens/home/home_screen.dart';
@@ -40,6 +41,9 @@ class GlobalRouter{
       if (state.matchedLocation == LoginScreen.route) {
          return null;
       }
+      else if (state.matchedLocation == SignUpScreen.route) {
+        return null; 
+      }
       return LoginScreen.route;
     }
     return null;
@@ -62,6 +66,14 @@ class GlobalRouter{
             builder: (context, _) {
               return const LoginScreen();
           }),
+          GoRoute( 
+            parentNavigatorKey: _rootNavigatorKey,
+            path: SignUpScreen.route,
+            name: SignUpScreen.name,
+            builder: (context, _) {
+              return const SignUpScreen();
+            },
+          ),
           ShellRoute(
               navigatorKey: _shellNavigatorKey,
               routes: [
