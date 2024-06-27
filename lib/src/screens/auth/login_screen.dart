@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_mad3/src/controllers/auth_controller.dart';
@@ -93,29 +94,20 @@ class _LoginScreenState extends State<LoginScreen> {
                             return const Center(child: CupertinoActivityIndicator());
                           }
                         );
-                        try{
-                          await AuthController.I.logIn(email.text.trim(), password.text.trim());
-                          await Future.delayed(Durations.medium1);
-                        } catch (e){
-                          if(e is Exception){
-                            showCupertinoDialog(
-                            context: context,
-                            builder: (context) {
-                              return CupertinoAlertDialog(
-                                title: const Text('Login Failed'),
-                                content: Text(e.toString()),
-                                actions: <Widget>[
-                                  CupertinoDialogAction(
-                                    child: const Text('OK'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                        if(email.text.isEmpty && password.text.isNotEmpty){
+                          showErrorMessage('Please input an email address.');
+                        }
+                        else if (password.text.isEmpty && email.text.isNotEmpty){
+                          showErrorMessage('Please input a password.');
+                        }
+                        else if(email.text.isEmpty && password.text.isEmpty){
+                          showErrorMessage('Please input an email and password.');
+                        }else{
+                          try{
+                            await AuthController.I.logIn(email.text.trim(), password.text.trim());
+                            await Future.delayed(Durations.medium1);
+                          } catch(e) {
+                            showErrorMessage(AuthController.I.errorMessage);
                           }
                         }
                       },
@@ -193,6 +185,27 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         }
       )
+    );
+  }
+
+  showErrorMessage(String error){
+    showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: const Text('Login Failed'),
+          content: Text(error),
+          actions: <Widget>[
+           CupertinoDialogAction(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                 Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

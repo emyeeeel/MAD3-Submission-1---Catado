@@ -69,8 +69,14 @@ class AuthController with ChangeNotifier {
       _provider = "EMAIL/PASSWORD AUTH";
       _image = "https://th.bing.com/th/id/OIP.1ysuWzMkrR4WxUAL3jfWEwAAAA?rs=1&pid=ImgDetMain";
 
-    } catch (e) {
-      throw Exception(e);
+    } on FirebaseAuthException catch (e) {
+      print('Firebase Auth Error: ${e.code}');
+      if (e.code == 'invalid-credential') {
+        errorMessage = 'Invalid email or password.';
+      } else {
+        errorMessage = 'Login failed. Please try again later.';
+      }
+      throw errorMessage; // You can throw a custom error message here if needed.
     }
   }
 
